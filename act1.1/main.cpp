@@ -15,7 +15,12 @@
 using namespace std;
 
 /*
-Function to merge two halves of a subarray.
+Description: Function to merge two halves of a subarray.
+Parameters:
+    arr: array containing the subarray to be merged, possibly the whole array.
+    l: index of the leftmost element of the subarray.
+    m: index of the middle element of the subarray.
+    r: index of the rightmost element of the subarray.
 Complexity, where n is the number of elements in the subarray:
     Time: O(n)
     Space: O(n)
@@ -76,8 +81,12 @@ void merge(vector<double> &arr, int l, int m, int r) {
 }
 
 /*
-Recursive function to sort an array using merge sort
-Complexity, where n is the number of elements in the array:
+Description: Recursive function to sort a subarray using merge sort.
+Parameters:
+    arr: array containing the subarray to be sorted, possibly the whole array.
+    l: index of the leftmost element of the subarray.
+    r: index of the rightmost element of the subarray.
+Complexity, where n is the number of elements in the subarray:
     Time: O(n log n)
     Space: O(n)
 */
