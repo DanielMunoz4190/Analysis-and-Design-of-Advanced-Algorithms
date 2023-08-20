@@ -103,8 +103,28 @@ void mergeSort(vector<double> &arr, int l, int r) {
 Description: Main function. Reads the input and calls the merge sort function.
 Test cases:
     1.
-        Input: 0
-        Output: 0
+        Input:
+            0
+        Output:
+            0
+    2.
+        Input:
+            1
+            743
+        Output:
+            743
+    3. 
+        Input:
+            5
+            1 2 3 4 5
+        Output:
+            5 4 3 2 1
+    4. 
+        Input:
+            11
+            3 1 4 1 5 9 2 6 5 3 5
+        Output:
+            9 6 5 5 5 4 3 3 2 1 1
 */
 int main() {
     int n;

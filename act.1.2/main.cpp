@@ -48,7 +48,24 @@ Test Cases:
             743
         Output:
             743
-        
+    3. 
+        Input:
+            6
+            5 1 2 10 6 2
+        Output:
+            17
+    4. 
+        Input:
+            6
+            7 3 9 10 8 6
+        Output:
+            24
+    5.
+        Input:
+            7
+            7 9 10 9 3 5 2
+        Output:
+            23
 */
 int main() {
     int n;
