@@ -30,16 +30,16 @@ void merge(vector<double> &arr, int l, int m, int r) {
     int n2 = r - m;
 
     // Create temp arrays
-    vector<double> L(n1), R(n2);
+    vector<double> firstHalve(n1), secondHalve(n2);
 
     /*
-    Copy data to temp arrays L[] and R[]
+    Copy data to temp arrays firstHalve[] and secondHalve[]
     Complexity O(N)
     */
     for (int i = 0; i < n1; i++)
-        L[i] = arr[l + i];
+        firstHalve[i] = arr[l + i];
     for (int j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
+        secondHalve[j] = arr[m + 1 + j];
 
     /*
     Merge the temp arrays back into arr[l..r]
@@ -49,32 +49,32 @@ void merge(vector<double> &arr, int l, int m, int r) {
     int j = 0;
     int k = l;
     while (i < n1 && j < n2) {
-        if (L[i] >= R[j]) {
-            arr[k] = L[i];
+        if (firstHalve[i] >= secondHalve[j]) {
+            arr[k] = firstHalve[i];
             i++;
         }
         else {
-            arr[k] = R[j];
+            arr[k] = secondHalve[j];
             j++;
         }
         k++;
     }
 
     /*
-    Copy the remaining elements of L[], if there are any
+    Copy the remaining elements of firstHalve[], if there are any
     Complexity O(N)
     */
     while (i < n1) {
-        arr[k] = L[i];
+        arr[k] = firstHalve[i];
         i++;
         k++;
     }
 
-    /* Copy the remaining elements of R[], if there are any
+    /* Copy the remaining elements of secondHalve[], if there are any
     Complexity O(N)
     */
     while (j < n2) {
-        arr[k] = R[j];
+        arr[k] = secondHalve[j];
         j++;
         k++;
     }
@@ -110,13 +110,11 @@ int main() {
     int n;
     cin >> n;
     vector<double> arr(n);
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i)
         cin >> arr[i];
-    }
     mergeSort(arr, 0, n - 1);
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i)
         cout << arr[i] << " ";
-    }
     cout << endl;
     return 0;
 }
