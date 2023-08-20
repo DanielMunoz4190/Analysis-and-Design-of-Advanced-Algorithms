@@ -99,14 +99,14 @@ void mergeSort(vector<double> &arr, int l, int r) {
     merge(arr, l, m, r);
 }
 
+/*
+Description: Main function. Reads the input and calls the merge sort function.
+Test cases:
+    1.
+        Input: 0
+        Output: 0
+*/
 int main() {
-    // The test cases are the following:
-    // Empty array
-    // Array with 5 elements already sorted
-    // Array with 5 elements sorted in reverse
-    // Array with 11 elements with repeated values
-    // Array with 100 elements with random values
-
     int n;
     cin >> n;
     vector<double> arr(n);
