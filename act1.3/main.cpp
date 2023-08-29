@@ -1,94 +1,252 @@
 /**
  * @file main.cpp
- * @author Juan Daniel Muñoz Dueñas A01641792 / Carlos David Amezcua Canalez A01641742
- * @brief
+ * @author Juan Daniel Muñoz Dueñas A01641792
+ * @author Carlos David Amezcua Canales A01641742
  * @version 0.1
- * @date 2023-08-23
- *
+ * @date 2023-08-28
+ * 
  * @copyright Copyright (c) 2023
- *
+ * 
  */
-
 #include <iostream>
 #include <vector>
-#include <stack>
+#include <queue>
+#include <limits>
 
 using namespace std;
 
-struct Cell {
-    int x, y;
-    Cell(int _x, int _y) : x(_x), y(_y) {}
-};
+template <typename T>
+static constexpr T inf = numeric_limits<T>::max() / 2;
 
-bool isSafe(const vector<vector<int>>& maze, int x, int y, const vector<vector<bool>>& visited) {
-    int M = maze.size();
-    int N = maze[0].size();
-    return (x >= 0 && x < M && y >= 0 && y < N && maze[x][y] == 1 && !visited[x][y]);
+const vector<int> DR = {1, 0, -1, 0};
+const vector<int> DC = {0, 1, 0, -1};
+
+/*
+Description:
+    Function to check if a cell is visitable.
+Complexity, where n is the number of rows and m is the number of columns:
+    Time: O(1)
+    Space: O(1)
+*/
+bool isVisitable(int n, int m, vector<vector<bool>> &maze, int row, int col)
+{
+    return 0 <= row && row < n && 0 <= col && col < m && maze[row][col];
 }
 
-bool solveMaze(const vector<vector<int>>& maze) {
-    int M = maze.size();
-    int N = maze[0].size();
+/*
+Description:
+    Recursive function to explore the maze using backtracking.
+Complexity, where n is the number of rows and m is the number of columns:
+    Time: O(3^(n*m))
+    Space: O(n*m))
+*/
+bool exploreMaze(int n, int m, vector<vector<bool>> &maze, vector<vector<bool>> &isVisited, int row, int col)
+{
+    isVisited[row][col] = true;
+    if (row == n - 1 && col == m - 1)
+        return true;
+    bool canReachEnd = false;
+    for (int i = 0; i < 4; ++i)
+    {
+        if (!canReachEnd)
+        {
+            int newRow = row + DR[i];
+            int newCol = col + DC[i];
+            if (isVisitable(n, m, maze, newRow, newCol) && !isVisited[newRow][newCol])
+                canReachEnd |= exploreMaze(n, m, maze, isVisited, newRow, newCol);
+        }
+    }
+    if (!canReachEnd)
+        isVisited[row][col] = false;
+    return canReachEnd;
+}
 
-    vector<vector<bool>> visited(M, vector<bool>(N, false));
-    stack<Cell> s;
-    s.push(Cell(0, 0));
+/*
+Description:
+    Function to solve the maze using backtracking.
+Complexity, where n is the number of rows and m is the number of columns:
+    Time: O(3^(n*m))
+    Space: O(n*m)
+*/
+vector<vector<bool>> solveMazeWithBacktracking(vector<vector<bool>> &maze)
+{
+    int n = maze.size();
+    int m = maze[0].size();
+    vector<vector<bool>> path(n, vector<bool>(m, false));
+    exploreMaze(n, m, maze, path, 0, 0);
+    return path;
+}
 
-    while (!s.empty()) {
-        Cell cell = s.top();
-        s.pop();
+/*
+Description:
+    Function to solve the maze using branch and bound.
+Complexity, where n is the number of rows and m is the number of columns:
+    Time: O(n*m)
+    Space: O(n*m)
+*/
 
-        int x = cell.x;
-        int y = cell.y;
-
-        if (x == M - 1 && y == N - 1) {
-            visited[x][y] = true;
-            for (int i = 0; i < M; i++) {
-                for (int j = 0; j < N; j++) {
-                    cout << visited[i][j] << " ";
+vector<vector<bool>> solveMazeWithBranchAndBound(vector<vector<bool>> &maze)
+{
+    int n = maze.size();
+    int m = maze[0].size();
+    vector<vector<int>> distance(n, vector<int>(m, inf<int>));
+    vector<vector<pair<int, int>>> parent(n, vector<pair<int, int>>(m, {-1, -1}));
+    queue<pair<int, int>> q;
+    q.push({0, 0});
+    distance[0][0] = 0;
+    while (!q.empty())
+    {
+        auto [row, col] = q.front();
+        q.pop();
+        if (row == n - 1 && col == m - 1)
+            while (!q.empty())
+                q.pop();
+        else
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                int newRow = row + DR[i];
+                int newCol = col + DC[i];
+                if (isVisitable(n, m, maze, newRow, newCol) && distance[row][col] + 1 < distance[newRow][newCol])
+                {
+                    distance[newRow][newCol] = distance[row][col] + 1;
+                    parent[newRow][newCol] = {row, col};
+                    q.push({newRow, newCol});
                 }
-                cout << endl;
-            }
-            return true;
-        }
-
-        if (isSafe(maze, x, y, visited)) {
-            visited[x][y] = true;
-
-            if (isSafe(maze, x - 1, y, visited)) {
-                s.push(Cell(x - 1, y));
-            }
-            if (isSafe(maze, x + 1, y, visited)) {
-                s.push(Cell(x + 1, y));
-            }
-            if (isSafe(maze, x, y - 1, visited)) {
-                s.push(Cell(x, y - 1));
-            }
-            if (isSafe(maze, x, y + 1, visited)) {
-                s.push(Cell(x, y + 1));
             }
         }
     }
-
-    cout << "No hay solución" << endl;
-    return false;
+    vector<vector<bool>> path(n, vector<bool>(m, false));
+    if (distance[n - 1][m - 1] != inf<int>)
+    {
+        int row = n - 1;
+        int col = m - 1;
+        while (row != -1 && col != -1)
+        {
+            path[row][col] = true;
+            auto [newRow, newCol] = parent[row][col];
+            row = newRow;
+            col = newCol;
+        }
+    }
+    return path;
 }
 
-int main() {
-    int M, N;
-    cin >> M >> N;
+/*
+Description:
+    Main function.
+Test Cases:
+    1.
+        Input:
+            5 5
+            1 0 1 1 1
+            1 1 1 0 1
+            0 1 1 0 1
+            1 0 1 1 1
+            1 1 1 1 1
+        Output:
+            1 0 0 0 0 
+            1 1 1 0 0 
+            0 0 1 0 0 
+            0 0 1 1 1 
+            0 0 0 0 1 
+            ...
+            1 0 0 0 0 
+            1 1 1 0 0 
+            0 0 1 0 0 
+            0 0 1 1 1 
+            0 0 0 0 1 
+    2.
+        Input:
+            5 6
+            1 1 1 1 1 1
+            1 1 1 1 1 1
+            1 1 1 1 1 1
+            1 1 1 1 1 1
+            1 1 1 1 1 1
+        Output:
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 1 1 1 1 1 
 
-    vector<vector<int>> maze(M, vector<int>(N));
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 1 1 1 1 1 
+    3.
+        Input:
+            5 5
+            1 0 1 1 1
+            1 1 1 0 1
+            0 0 0 0 0 
+            0 0 0 0 0
+            1 1 1 1 1
+        Output:
+            0 0 0 0 0 
+            0 0 0 0 0 
+            0 0 0 0 0 
+            0 0 0 0 0 
+            0 0 0 0 0 
 
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < N; j++) {
-            cin >> maze[i][j];
+            0 0 0 0 0 
+            0 0 0 0 0 
+            0 0 0 0 0 
+            0 0 0 0 0 
+            0 0 0 0 0 
+    4. 
+        Input:
+            5 6
+            1 1 1 1 1 1
+            1 1 1 0 0 1
+            1 0 1 1 1 1
+            1 0 1 0 1 1
+            1 1 1 1 0 1
+        Output:
+            1 0 0 0 0 0 
+            1 0 0 0 0 0 
+            1 0 1 1 1 0 
+            1 0 1 0 1 1 
+            1 1 1 0 0 1 
+
+            1 0 0 0 0 0 
+            1 1 1 0 0 0 
+            0 0 1 1 1 0 
+            0 0 0 0 1 1 
+            0 0 0 0 0 1 
+            
+*/
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    vector<vector<bool>> maze(n, vector<bool>(m));
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            char aux;
+            cin >> aux;
+            maze[i][j] = aux == '1';
         }
     }
-
-    solveMaze(maze);
+    vector<vector<bool>> path = solveMazeWithBacktracking(maze);
+    for (auto row : path)
+    {
+        for (auto cell : row)
+            cout << cell << " ";
+        cout << endl;
+    }
+    cout << endl;
+    path = solveMazeWithBranchAndBound(maze);
+    for (auto row : path)
+    {
+        for (auto cell : row)
+            cout << cell << " ";
+        cout << endl;
+    }
 
     return 0;
 }
-
-
