@@ -1,13 +1,3 @@
-/**
- * @file main.cpp
- * @author Juan Daniel Muñoz Dueñas A01641792
- * @author Carlos David Amezcua Canales A01641742
- * @version 0.1
- * @date 2023-08-28
- *
- * @copyright Copyright (c) 2023
- *
- */
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -24,6 +14,14 @@ const vector<int> DC = {0, 1, 0, -1};
 /*
 Description:
     Function to check if a cell is visitable.
+Parameters:
+    n: Number of rows in the maze.
+    m: Number of columns in the maze.
+    maze: 2D vector of booleans representing the maze. True indicates a path, and False indicates a wall.
+    row: Current row position.
+    col: Current column position.
+Return:
+    True if the cell is visitable, otherwise False.
 Complexity, where n is the number of rows and m is the number of columns:
     Time: O(1)
     Space: O(1)
@@ -35,6 +33,15 @@ bool isVisitable(int n, int m, vector<vector<bool>> &maze, int row, int col) {
 /*
 Description:
     Recursive function to explore the maze using backtracking.
+Parameters:
+    n: Number of rows in the maze.
+    m: Number of columns in the maze.
+    maze: 2D vector of booleans representing the maze. True indicates a path, and False indicates a wall.
+    isVisited: 2D vector of booleans indicating whether a cell has been visited.
+    row: Current row position.
+    col: Current column position.
+Return:
+    True if the end of the maze can be reached from the current position, otherwise False.
 Complexity, where n is the number of rows and m is the number of columns:
     Time: O(3 ^ (n * m))
     Space: O(n * m))
@@ -60,6 +67,10 @@ bool exploreMaze(int n, int m, vector<vector<bool>> &maze, vector<vector<bool>> 
 /*
 Description:
     Function to solve the maze using backtracking.
+Parameters:
+    maze: 2D vector of booleans representing the maze. True indicates a path, and False indicates a wall.
+Return:
+    2D vector of booleans representing the path from the start to the end of the maze.
 Complexity, where n is the number of rows and m is the number of columns:
     Time: O(3 ^ (n * m))
     Space: O(n * m)
@@ -75,11 +86,14 @@ vector<vector<bool>> solveMazeWithBacktracking(vector<vector<bool>> &maze) {
 /*
 Description:
     Function to solve the maze using branch and bound.
+Parameters:
+    maze: 2D vector of booleans representing the maze. True indicates a path, and False indicates a wall.
+Return:
+    2D vector of booleans representing the path from the start to the end of the maze.
 Complexity, where n is the number of rows and m is the number of columns:
     Time: O(n * m)
     Space: O(n * m)
 */
-
 vector<vector<bool>> solveMazeWithBranchAndBound(vector<vector<bool>> &maze) {
     int n = maze.size();
     int m = maze[0].size();
@@ -149,7 +163,7 @@ Test Cases:
             5 6
             1 1 1 1 1 1
             1 1 1 1 1 1
-            1 1 1 1 1 1
+             1 1 1 1 1 1
             1 1 1 1 1 1
             1 1 1 1 1 1
         Output:
