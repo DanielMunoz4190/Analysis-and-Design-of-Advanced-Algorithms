@@ -2,7 +2,8 @@
  * @file main.cpp
  * @author Carlos David Amezcua Canales A01641742
  * @author Juan Daniel Muñoz Dueñas A01641792
- * @brief
+ * @author Diego Curiel Castellanos A01640372
+ * @brief  
  * @version 0.1
  * @date 09-09-2023
  */
