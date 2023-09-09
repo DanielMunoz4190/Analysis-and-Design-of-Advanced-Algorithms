@@ -1,2 +1,7 @@
-transmission1.txt
-transmission2.txt
+true 142
+true 249
+true 5
+false
+true 266
+false
+249 264
