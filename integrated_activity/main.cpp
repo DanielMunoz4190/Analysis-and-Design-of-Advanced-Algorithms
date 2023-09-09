@@ -19,6 +19,9 @@
 
 using namespace std;
 
+const int NUMBER_OF_TRANSMISSIONS = 2;
+const int NUMBER_OF_MALICIOUS_CODES = 3;
+
 string readFile(const string &fileName) {
     ifstream archivo(fileName);
 
@@ -34,6 +37,17 @@ string readFile(const string &fileName) {
 
 int main()
 {
+    vector<string> transmissions(NUMBER_OF_TRANSMISSIONS), maliciousCodes(NUMBER_OF_MALICIOUS_CODES);
+    for (int i = 0; i < NUMBER_OF_TRANSMISSIONS; ++i)
+    {
+        transmissions[i] = readFile("transmission" + to_string(i + 1) + ".txt");
+    }
+    for (int i = 0; i < NUMBER_OF_MALICIOUS_CODES; ++i)
+    {
+        maliciousCodes[i] = readFile("mcode" + to_string(i + 1) + ".txt");
+    }
+
+
     return 0;
 }
 
