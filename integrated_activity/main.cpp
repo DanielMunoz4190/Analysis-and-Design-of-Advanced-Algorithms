@@ -127,7 +127,7 @@ int main()
     vector<vector<int>> part1Ans(transmissions.size(), vector<int>(maliciousCodes.size(), false));
     for (int i = 0; i < maliciousCodes.size(); ++i)
     {
-        string s = maliciousCodes[i] + '#';
+        string s = maliciousCodes[i] + '$';
         for (string &j : transmissions)
         {
             s += j;
@@ -163,7 +163,7 @@ int main()
     {
         for (int j = i + 1; j < transmissions.size(); ++j)
         {
-            string s = transmissions[i] + '#' + transmissions[j];
+            string s = transmissions[i] + '$' + transmissions[j] + '#';
             vector<int> suffixArray = constructSA(s);
             vector<int> LCPArray = computeLCP(s, suffixArray);
             int longestCommonSubstringLength = 0, start = 0, end = -1;
