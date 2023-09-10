@@ -5,7 +5,7 @@
  * @author Diego Curiel Castellanos A01640372
  * @brief
  * @author Diego Curiel Castellanos A01640372
- * @brief  
+ * @brief
  * @version 0.1
  * @date 09-09-2023
  */
@@ -22,13 +22,11 @@
 
 using namespace std;
 
-string readFile(const string &fileName)
-{
+string readFile(const string &fileName) {
     ifstream archivo(fileName);
 
     if (!archivo.is_open()) throw runtime_error("Error opening file " + fileName);
-    if (!archivo.is_open())
-        throw runtime_error("Error opening file " + fileName);
+    if (!archivo.is_open()) throw runtime_error("Error opening file " + fileName);
 
     stringstream buffer;
     buffer << archivo.rdbuf();
@@ -37,84 +35,6 @@ string readFile(const string &fileName)
     archivo.close();
 
     return buffer.str();
-}
-
-vector<int> zFunction(string &s)
-{
-    int l = 0, r = 0, n = s.size();
-    vector<int> z(s.size(), 0);
-    for (int i = 1; i < n; ++i)
-    {
-        if (i <= r)
-            z[i] = min(r - i + 1, z[i - l]);
-        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
-            z[i]++;
-        if (i + z[i] - 1 > r)
-            l = i, r = i + z[i] - 1;
-    }
-    return z;
-}
-
-#define RB(x) (x < n ? r[x] : 0)
-void csort(vector<int> &sa, vector<int> &r, int k)
-{
-    int n = sa.size();
-    vector<int> f(max(255, n), 0), t(n);
-    for (int i = 0; i < n; ++i)
-        f[RB(i + k)]++;
-    int sum = 0;
-    for (int i = 0; i < max(255, n); ++i)
-        f[i] = (sum += f[i]) - f[i];
-    for (int i = 0; i < n; ++i)
-        t[f[RB(sa[i] + k)]++] = sa[i];
-    sa = t;
-}
-vector<int> constructSA(string &s)
-{
-    int n = s.size(), rank;
-    vector<int> sa(n), r(n), t(n);
-    for (int i = 0; i < n; ++i)
-        sa[i] = i, r[i] = s[i];
-    for (int k = 1; k < n; k *= 2)
-    {
-        csort(sa, r, k);
-        csort(sa, r, 0);
-        t[sa[0]] = rank = 0;
-        for (int i = 1; i < n; ++i)
-        {
-            if (r[sa[i]] != r[sa[i - 1]] || RB(sa[i] + k) != RB(sa[i - 1] + k))
-                rank++;
-            t[sa[i]] = rank;
-        }
-        r = t;
-        if (r[sa[n - 1]] == n - 1)
-            break;
-    }
-    return sa;
-}
-
-vector<int> computeLCP(string &s, vector<int> &sa)
-{
-    int n = (int)s.size(), L = 0;
-    vector<int> lcp(n), plcp(n), phi(n);
-    phi[sa[0]] = -1;
-    for (int i = 1; i < n; ++i)
-        phi[sa[i]] = sa[i - 1];
-    for (int i = 0; i < n; ++i)
-    {
-        if (phi[i] < 0)
-        {
-            plcp[i] = 0;
-            continue;
-        }
-        while (s[i + L] == s[phi[i] + L])
-            L++;
-        plcp[i] = L;
-        L = max(L - 1, 0);
-    }
-    for (int i = 0; i < n; ++i)
-        lcp[i] = plcp[sa[i]];
-    return lcp;
 }
 
 vector<int> zFunction(string &s) {
@@ -263,7 +183,7 @@ int main() {
             }
         }
     }
-    for(int i = 0; i < transmissions.size(); ++i){
+    for (int i = 0; i < transmissions.size(); ++i) {
         manacher(transmissions[i]);
         pair<int, int> ans = findLargestPalindrome();
         cout << ans.first << " " << ans.second << endl;
