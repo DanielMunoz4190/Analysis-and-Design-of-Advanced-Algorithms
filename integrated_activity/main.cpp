@@ -190,7 +190,7 @@ int main() {
     }
     for (int i = 0; i < transmissions.size(); ++i) {
         for (int j = i + 1; j < transmissions.size(); ++j) {
-            string s = transmissions[i] + '#' + transmissions[j];
+            string s = transmissions[i] + '$' + transmissions[j] + '#';
             vector<int> suffixArray = constructSA(s);
             vector<int> LCPArray = computeLCP(s, suffixArray);
             int longestCommonSubstringLength = 0, start = 0, end = -1;
