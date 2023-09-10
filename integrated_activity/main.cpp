@@ -211,7 +211,12 @@ int main() {
     for (int i = 0; i < maliciousCodes.size(); ++i) {
         maliciousCodes[i] = readFile("mcode" + to_string(i + 1) + ".txt");
     }
-
+    /*
+    Description:
+        Checks if each malicious code is a subsequence of each transmission.
+    Complexity:
+        Total Complexity: O(|M| * max(|T|, sum(T)))
+    */
     for (int i = 0; i < transmissions.size(); ++i) {
         for (int j = 0; j < maliciousCodes.size(); ++j) {
             int arrow = 0, start = 0;
@@ -230,12 +235,23 @@ int main() {
             }
         }
     }
-
+    /*
+    Description:
+        Finds the largest palindrome in each transmission using Manacher's algorithm.
+    Complexity:
+        O(n) 
+    */
     for (int i = 0; i < transmissions.size(); ++i) {
         manacher(transmissions[i]);
         pair<int, int> ans = findLargestPalindrome();
         cout << ans.first << " " << ans.second << endl;
     }
+    /*
+    Description:
+        Finds the longest common substring between pairs of transmissions using a suffix array and an LCP array.
+    Complexity:
+        O(sum(T) * log(sum(T))) 
+    */
 
     for (int i = 0; i < transmissions.size(); ++i) {
         for (int j = i + 1; j < transmissions.size(); ++j) {
