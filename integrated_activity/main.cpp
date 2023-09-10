@@ -39,8 +39,7 @@ string readFile(const string &fileName) {
     ifstream archivo(fileName);
 
     if (!archivo.is_open()) throw runtime_error("Error opening file " + fileName);
-    if (!archivo.is_open()) throw runtime_error("Error opening file " + fileName);
-
+    
     stringstream buffer;
     buffer << archivo.rdbuf();
     archivo.close();
