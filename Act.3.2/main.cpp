@@ -57,6 +57,17 @@ bool le(ld a, ld b)
 {
     return b - a > eps<ld>;
 }
+/*
+Description:
+    Computes the shortest path from a source node to all other nodes in a graph using Dijkstra's algorithm.
+Parameters:
+    adjList - Adjacency list representation of the graph.
+    source - Source node from which shortest paths are to be computed.
+Returns:
+    A vector containing the shortest path distances from the source to all other nodes.
+Complexity:
+    Time: O(|E| log|E|) - where V is the number of vertices and E is the number of edges.
+*/
 
 vector<ld> dijkstra(vector<vector<pair<int, ld>>> &adjList, int source)
 {
@@ -87,7 +98,17 @@ vector<ld> dijkstra(vector<vector<pair<int, ld>>> &adjList, int source)
     }
     return d;
 }
-
+/*
+Description:
+    Computes the shortest paths between all pairs of nodes in a graph using the Floyd-Warshall algorithm.
+Parameters:
+    adjMatrix - Adjacency matrix representation of the graph.
+Returns:
+    A matrix containing the shortest path distances between all pairs of nodes.
+Complexity:
+    Time: O(V^3) - where V is the number of vertices.
+    Space: O(V^2)
+*/
 vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix)
 {
     int n = adjMatrix.size();
@@ -107,13 +128,100 @@ vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix)
     }
     return d;
 }
+/*
+Description:
+    Main function that reads input for a graph, computes shortest paths using Dijkstra's and Floyd-Warshall algorithms, and prints the results.
+Parameters:
+    None.
+Returns:
+    0 on successful execution.
+Complexity:
+    Time: Depends on the input size and the algorithms used.
+    Space: Depends on the input size.
+*/
 
+/*
+    Test cases:
+        1.
+        Input: 
+            1 0
+        Output:
+            Dijkstra :
+
+            Floyd :
+                0
+
+        2. 
+        Input:
+            0 0
+        Output:
+            Dijkstra :
+
+            Floyd :
+
+        3.
+        Input: 
+            4 2
+            0 1 1
+            2 3 2
+        Output:
+            Dijkstra :
+            node 0 to node 1 : 1
+            node 0 to node 2 : -1
+            node 0 to node 3 : -1
+            node 1 to node 0 : -1
+            node 1 to node 2 : -1
+            node 1 to node 3 : -1
+            node 2 to node 0 : -1
+            node 2 to node 1 : -1
+            node 2 to node 3 : 2
+            node 3 to node 0 : -1
+            node 3 to node 1 : -1
+            node 3 to node 2 : -1
+
+            Floyd :
+                0 1 -1 -1
+                -1 0 -1 -1
+                -1 -1 0 2
+                -1 -1 -1 0   
+
+        4. 
+        Input:      
+            4 5
+            0 1 2
+            1 2 3
+            2 3 1
+            3 0 4
+            0 2 5
+        Dijkstra :
+            node 0 to node 1 : 2
+            node 0 to node 2 : 5
+            node 0 to node 3 : 6
+            node 1 to node 0 : 8
+            node 1 to node 2 : 3
+            node 1 to node 3 : 4
+            node 2 to node 0 : 5
+            node 2 to node 1 : 7
+            node 2 to node 3 : 1
+            node 3 to node 0 : 4
+            node 3 to node 1 : 6
+            node 3 to node 2 : 9
+            
+        Floyd :
+            0 2 5 6 
+            8 0 3 4 
+            5 7 0 1 
+            4 6 9 0 
+*/
 int main()
 {
     int v, e;
     cin >> v >> e;
     vector<vector<pair<int, ld>>> adjList(v);
     vector<vector<ld>> adjMatrix(v, vector<ld>(v, inf<ld>));
+    for (int i = 0; i < v; ++i){
+        adjMatrix[i][i] = 0.0;
+    }
     for (int i = 0; i < e; ++i)
     {
         int from, to;
