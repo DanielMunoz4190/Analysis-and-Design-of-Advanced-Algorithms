@@ -4,15 +4,14 @@
  * @author Juan Daniel Muñoz Dueñas A01641792
  * @version 0.1
  * @date 2023-09-30
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <iostream>
 #include <limits>
 #include <queue>
 #include <vector>
-
 
 using namespace std;
 
@@ -37,8 +36,7 @@ Complexity:
     Space: O(1)
 */
 
-bool neq(ld a, ld b)
-{
+bool neq(ld a, ld b) {
     return abs(a - b) > eps<ld>;
 }
 /*
@@ -53,8 +51,7 @@ Complexity:
     Time: O(1)
     Space: O(1)
 */
-bool le(ld a, ld b)
-{
+bool le(ld a, ld b) {
     return b - a > eps<ld>;
 }
 /*
@@ -69,28 +66,23 @@ Complexity:
     Time: O(|E| log|E|) - where V is the number of vertices and E is the number of edges.
 */
 
-vector<ld> dijkstra(vector<vector<pair<int, ld>>> &adjList, int source)
-{
+vector<ld> dijkstra(vector<vector<pair<int, ld>>> &adjList, int source) {
     int n = adjList.size();
     vector<ld> d(n, inf<ld>);
     d[source] = 0.0;
     priority_queue<pair<ld, int>, vector<pair<ld, int>>, greater<pair<ld, int>>> pq;
     pq.push({0.0, source});
-    while (!pq.empty())
-    {
+    while (!pq.empty()) {
         int v = pq.top().second;
         ld distV = pq.top().first;
         pq.pop();
-        if (neq(distV, d[v]))
-        {
+        if (neq(distV, d[v])) {
             continue;
         }
-        for (auto edge : adjList[v])
-        {
+        for (auto edge : adjList[v]) {
             int to = edge.first;
             ld len = edge.second;
-            if (le(d[v] + len, d[to]))
-            {
+            if (le(d[v] + len, d[to])) {
                 d[to] = d[v] + len;
                 pq.push({d[to], to});
             }
@@ -109,18 +101,13 @@ Complexity:
     Time: O(V^3) - where V is the number of vertices.
     Space: O(V^2)
 */
-vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix)
-{
+vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix) {
     int n = adjMatrix.size();
     vector<vector<ld>> d = adjMatrix;
-    for (int k = 0; k < n; ++k)
-    {
-        for (int i = 0; i < n; ++i)
-        {
-            for (int j = 0; j < n; ++j)
-            {
-                if (le(d[i][k], inf<ld>) && le(d[k][j], inf<ld>) && le(d[i][k] + d[k][j], d[i][j]))
-                {
+    for (int k = 0; k < n; ++k) {
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (le(d[i][k], inf<ld>) && le(d[k][j], inf<ld>) && le(d[i][k] + d[k][j], d[i][j])) {
                     d[i][j] = d[i][k] + d[k][j];
                 }
             }
@@ -130,20 +117,15 @@ vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix)
 }
 /*
 Description:
-    Main function that reads input for a graph, computes shortest paths using Dijkstra's and Floyd-Warshall algorithms, and prints the results.
-Parameters:
-    None.
-Returns:
-    0 on successful execution.
-Complexity:
-    Time: Depends on the input size and the algorithms used.
-    Space: Depends on the input size.
+    Main function that reads input for a graph, computes shortest paths using Dijkstra's and Floyd-Warshall algorithms,
+and prints the results. Parameters: None. Returns: 0 on successful execution. Complexity: Time: Depends on the input
+size and the algorithms used. Space: Depends on the input size.
 */
 
 /*
     Test cases:
         1.
-        Input: 
+        Input:
             1 0
         Output:
             Dijkstra :
@@ -151,7 +133,7 @@ Complexity:
             Floyd :
                 0
 
-        2. 
+        2.
         Input:
             0 0
         Output:
@@ -160,7 +142,7 @@ Complexity:
             Floyd :
 
         3.
-        Input: 
+        Input:
             4 2
             0 1 1
             2 3 2
@@ -183,10 +165,10 @@ Complexity:
                 0 1 -1 -1
                 -1 0 -1 -1
                 -1 -1 0 2
-                -1 -1 -1 0   
+                -1 -1 -1 0
 
-        4. 
-        Input:      
+        4.
+        Input:
             4 5
             0 1 2
             1 2 3
@@ -206,24 +188,21 @@ Complexity:
             node 3 to node 0 : 4
             node 3 to node 1 : 6
             node 3 to node 2 : 9
-            
         Floyd :
-            0 2 5 6 
-            8 0 3 4 
-            5 7 0 1 
-            4 6 9 0 
+            0 2 5 6
+            8 0 3 4
+            5 7 0 1
+            4 6 9 0
 */
-int main()
-{
+int main() {
     int v, e;
     cin >> v >> e;
     vector<vector<pair<int, ld>>> adjList(v);
     vector<vector<ld>> adjMatrix(v, vector<ld>(v, inf<ld>));
-    for (int i = 0; i < v; ++i){
+    for (int i = 0; i < v; ++i) {
         adjMatrix[i][i] = 0.0;
     }
-    for (int i = 0; i < e; ++i)
-    {
+    for (int i = 0; i < e; ++i) {
         int from, to;
         ld w;
         cin >> from >> to >> w;
@@ -231,13 +210,10 @@ int main()
         adjMatrix[from][to] = w;
     }
     cout << "Dijkstra :" << endl;
-    for (int i = 0; i < v; ++i)
-    {
+    for (int i = 0; i < v; ++i) {
         vector<ld> dist = dijkstra(adjList, i);
-        for (int j = 0; j < v; ++j)
-        {
-            if (i != j)
-            {
+        for (int j = 0; j < v; ++j) {
+            if (i != j) {
                 cout << "node " << i << " to node " << j << " : " << (dist[j] == inf<ld> ? -1 : dist[j]) << endl;
             }
         }
@@ -245,10 +221,8 @@ int main()
     cout << endl;
     vector<vector<ld>> dist = floydWarshall(adjMatrix);
     cout << "Floyd :" << endl;
-    for (int i = 0; i < v; ++i)
-    {
-        for (int j = 0; j < v; ++j)
-        {
+    for (int i = 0; i < v; ++i) {
+        for (int j = 0; j < v; ++j) {
             cout << (dist[i][j] == inf<ld> ? -1 : dist[i][j]) << " ";
         }
         cout << endl;
