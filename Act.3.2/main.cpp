@@ -1,3 +1,4 @@
+
 /**
  * @file main.cpp
  * @author Carlos David Amezcua Canales A01641742
@@ -25,20 +26,20 @@ static constexpr T eps = numeric_limits<T>::epsilon();
 
 /*
 Description:
-    Checks if two long double values are not approximately equal.
+    Checks if two long double values are approximately equal.
 Parameters:
     a - First long double value.
     b - Second long double value.
 Returns:
-    True if the values are not approximately equal, false otherwise.
+    True if the values are approximately equal, false otherwise.
 Complexity:
     Time: O(1)
     Space: O(1)
 */
-
-bool neq(ld a, ld b) {
-    return abs(a - b) > eps<ld>;
+bool eq(ld a, ld b) {
+    return abs(a - b) <= eps<ld>;
 }
+
 /*
 Description:
     Checks if the first long double value is less than the second long double value.
@@ -54,6 +55,7 @@ Complexity:
 bool le(ld a, ld b) {
     return b - a > eps<ld>;
 }
+
 /*
 Description:
     Computes the shortest path from a source node to all other nodes in a graph using Dijkstra's algorithm.
@@ -63,9 +65,10 @@ Parameters:
 Returns:
     A vector containing the shortest path distances from the source to all other nodes.
 Complexity:
-    Time: O(|E| log|E|) - where V is the number of vertices and E is the number of edges.
+    Time: O(|V| + |E| log |E|) - where |V| is the number of vertices and |E| is the number of edges. 
+        A most efficient implementation of Dijkstra's algorithm can achieve a O(|E| + |V| log |V|) 
+        time complexity using a Fibonacci heap instead of a priority queue.
 */
-
 vector<ld> dijkstra(vector<vector<pair<int, ld>>> &adjList, int source) {
     int n = adjList.size();
     vector<ld> d(n, inf<ld>);
@@ -76,20 +79,20 @@ vector<ld> dijkstra(vector<vector<pair<int, ld>>> &adjList, int source) {
         int v = pq.top().second;
         ld distV = pq.top().first;
         pq.pop();
-        if (neq(distV, d[v])) {
-            continue;
-        }
-        for (auto edge : adjList[v]) {
-            int to = edge.first;
-            ld len = edge.second;
-            if (le(d[v] + len, d[to])) {
-                d[to] = d[v] + len;
-                pq.push({d[to], to});
+        if (eq(distV, d[v])) {
+            for (auto edge : adjList[v]) {
+                int to = edge.first;
+                ld len = edge.second;
+                if (le(d[v] + len, d[to])) {
+                    d[to] = d[v] + len;
+                    pq.push({d[to], to});
+                }
             }
         }
     }
     return d;
 }
+
 /*
 Description:
     Computes the shortest paths between all pairs of nodes in a graph using the Floyd-Warshall algorithm.
@@ -98,8 +101,8 @@ Parameters:
 Returns:
     A matrix containing the shortest path distances between all pairs of nodes.
 Complexity:
-    Time: O(V^3) - where V is the number of vertices.
-    Space: O(V^2)
+    Time: O(|V| ^ 3) - where |V| is the number of vertices.
+    Space: O(|V| ^ 2)
 */
 vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix) {
     int n = adjMatrix.size();
@@ -115,11 +118,12 @@ vector<vector<ld>> floydWarshall(vector<vector<ld>> &adjMatrix) {
     }
     return d;
 }
+
 /*
 Description:
     Main function that reads input for a graph, computes shortest paths using Dijkstra's and Floyd-Warshall algorithms,
-and prints the results. Parameters: None. Returns: 0 on successful execution. Complexity: Time: Depends on the input
-size and the algorithms used. Space: Depends on the input size.
+    and prints the results. Parameters: None. Returns: 0 on successful execution. Complexity: Time: Depends on the input
+    size and the algorithms used. Space: Depends on the input size.
 */
 
 /*
@@ -214,7 +218,7 @@ int main() {
         vector<ld> dist = dijkstra(adjList, i);
         for (int j = 0; j < v; ++j) {
             if (i != j) {
-                cout << "node " << i << " to node " << j << " : " << (dist[j] == inf<ld> ? -1 : dist[j]) << endl;
+                cout << "node " << i << " to node " << j << " : " << (eq(dist[j], inf<ld>) ? -1 : dist[j]) << endl;
             }
         }
     }
@@ -223,7 +227,7 @@ int main() {
     cout << "Floyd :" << endl;
     for (int i = 0; i < v; ++i) {
         for (int j = 0; j < v; ++j) {
-            cout << (dist[i][j] == inf<ld> ? -1 : dist[i][j]) << " ";
+            cout << (eq(dist[i][j], inf<ld>) ? -1 : dist[i][j]) << " ";
         }
         cout << endl;
     }
